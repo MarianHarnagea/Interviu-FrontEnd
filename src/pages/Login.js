@@ -7,8 +7,8 @@ const Login = ({ setLogedInUser }) => {
     email: "",
     password: "",
   });
-
   const history = useHistory();
+  const [errors, setErrors] = useState();
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -16,10 +16,11 @@ const Login = ({ setLogedInUser }) => {
     axios
       .post("http://localhost:5000/auth/login", userValues)
       .then((res) => {
-        if (res.data.user) {
+        if (res.data.error) {
+          setErrors(res.data.error);
+        } else {
           history.push("/dashboard");
           setLogedInUser(res.data.user);
-          console.log(res.data.user);
         }
       })
       .catch((err) => console.log(err));
@@ -27,6 +28,12 @@ const Login = ({ setLogedInUser }) => {
 
   return (
     <form className="mt-5" onSubmit={handleLoginSubmit}>
+      {errors ? (
+        <div className="alert alert-danger" role="alert">
+          {errors}
+        </div>
+      ) : null}
+
       <div className="form-group">
         <label htmlFor="Email">Email address</label>
         <input
@@ -34,6 +41,7 @@ const Login = ({ setLogedInUser }) => {
           className="form-control"
           id="Email"
           aria-describedby="emailHelp"
+          required
           onChange={(e) =>
             setUserValues({ ...userValues, email: e.target.value })
           }
@@ -46,6 +54,7 @@ const Login = ({ setLogedInUser }) => {
           type="password"
           className="form-control"
           id="Password"
+          required
           onChange={(e) =>
             setUserValues({ ...userValues, password: e.target.value })
           }

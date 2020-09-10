@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Register = () => {
   const [userValues, setUserValues] = useState({
@@ -8,17 +9,42 @@ const Register = () => {
     password: "",
   });
 
+  const [fail, setFail] = useState();
+
+  const history = useHistory();
+
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
 
     axios
       .post("http://localhost:5000/auth/register", userValues)
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.success) {
+          history.push("/");
+          setUserValues({
+            ...userValues,
+
+            name: "",
+            email: "",
+            password: "",
+          });
+        } else {
+          setFail(res.data.fail);
+        }
+      })
       .catch((err) => console.log(err));
   };
 
   return (
     <form className="mt-5 " onSubmit={handleRegisterSubmit}>
+      {fail ? (
+        <div className={fail ? "alert alert-danger" : null} role="alert">
+          {fail}
+        </div>
+      ) : null}
+
       <div className="form-group">
         <label htmlFor="Name">Name</label>
         <input
