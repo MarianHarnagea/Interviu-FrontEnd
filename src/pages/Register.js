@@ -19,10 +19,7 @@ const Register = () => {
     axios
       .post("http://localhost:5000/auth/register", userValues)
       .then((res) => {
-        console.log(res.data);
-
         if (res.data.success) {
-          history.push("/");
           setUserValues({
             ...userValues,
 
@@ -30,6 +27,7 @@ const Register = () => {
             email: "",
             password: "",
           });
+          history.push("/");
         }
       })
       .catch((err) => setRegisterFail(err.response.data.fail));

@@ -1,29 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/navbar/Navbar";
+import { useHistory } from "react-router-dom";
 
 function App() {
   const [logedInUser, setLogedInUser] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const history = useHistory();
+
+  useEffect(() => {
+    if (isAuthenticated !== true) {
+      history.push("/");
+    }
+  });
   return (
-    <Router>
+    <>
       <Navbar logedInUser={logedInUser} />
       <div className="App ">
         <Switch>
           <Route
             exact
             path="/"
-            component={() => <Login setLogedInUser={setLogedInUser} />}
+            component={() => (
+              <Login
+                setLogedInUser={setLogedInUser}
+                setIsAuthenticated={setIsAuthenticated}
+                isAuthenticated={isAuthenticated}
+              />
+            )}
           />
           <Route path="/register" component={Register} />
-          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/dashboard" component={() => <Dashboard />} />
         </Switch>
       </div>
-    </Router>
+    </>
   );
 }
 

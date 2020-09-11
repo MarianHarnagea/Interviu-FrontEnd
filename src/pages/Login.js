@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const Login = ({ setLogedInUser }) => {
+const Login = ({ setLogedInUser, setIsAuthenticated }) => {
   const [userValues, setUserValues] = useState({
     email: "",
     password: "",
@@ -16,8 +16,9 @@ const Login = ({ setLogedInUser }) => {
     axios
       .post("http://localhost:5000/auth/login", userValues)
       .then((res) => {
-        history.push("/dashboard");
         setLogedInUser(res.data.user);
+        setIsAuthenticated(true);
+        history.push("/dashboard");
       })
       .catch((err) => setErrors(err.response.data.error));
   };
