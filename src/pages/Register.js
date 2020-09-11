@@ -9,7 +9,7 @@ const Register = () => {
     password: "",
   });
 
-  const [fail, setFail] = useState();
+  const [registerFail, setRegisterFail] = useState();
 
   const history = useHistory();
 
@@ -30,18 +30,19 @@ const Register = () => {
             email: "",
             password: "",
           });
-        } else {
-          setFail(res.data.fail);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setRegisterFail(err.response.data.fail));
   };
 
   return (
     <form className="mt-5 " onSubmit={handleRegisterSubmit}>
-      {fail ? (
-        <div className={fail ? "alert alert-danger" : null} role="alert">
-          {fail}
+      {registerFail ? (
+        <div
+          className={registerFail ? "alert alert-danger" : null}
+          role="alert"
+        >
+          {registerFail}
         </div>
       ) : null}
 

@@ -16,14 +16,10 @@ const Login = ({ setLogedInUser }) => {
     axios
       .post("http://localhost:5000/auth/login", userValues)
       .then((res) => {
-        if (res.data.error) {
-          setErrors(res.data.error);
-        } else {
-          history.push("/dashboard");
-          setLogedInUser(res.data.user);
-        }
+        history.push("/dashboard");
+        setLogedInUser(res.data.user);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setErrors(err.response.data.error));
   };
 
   return (
