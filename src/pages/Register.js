@@ -1,36 +1,30 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../store/actions/authActions";
 
 const Register = () => {
+  const registerFail = useSelector((state) => state.registerFail);
+
   const [userValues, setUserValues] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const [registerFail, setRegisterFail] = useState();
-
-  const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
+    dispatch(registerUser(userValues));
+    setUserValues({
+      ...userValues,
 
-    axios
-      .post("http://localhost:5000/auth/register", userValues)
-      .then((res) => {
-        if (res.data.success) {
-          setUserValues({
-            ...userValues,
-
-            name: "",
-            email: "",
-            password: "",
-          });
-          history.push("/");
-        }
-      })
-      .catch((err) => setRegisterFail(err.response.data.fail));
+      name: "",
+      email: "",
+      password: "",
+    });
   };
 
   return (

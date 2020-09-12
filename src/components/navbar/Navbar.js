@@ -1,9 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const Navbar = ({ logedInUser }) => {
-  // const history = useHistory();
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../store/actions/authActions";
+
+const Navbar = () => {
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    dispatch(logOut());
+    history.push("/");
+  };
+
+  const styleLogout = {
+    border: "none",
+    backgroundColor: "transparent",
+    paddingTop: "8px",
+  };
 
   const logedIn = (
     <>
@@ -13,9 +31,9 @@ const Navbar = ({ logedInUser }) => {
         </Link>
       </li>
 
-      {logedInUser ? (
+      {user !== null ? (
         <Link className="nav-link" to="#">
-          <li className="nav-item">Welcome {logedInUser.Name} </li>
+          <li className="nav-item">Welcome {user} </li>
         </Link>
       ) : null}
     </>
@@ -50,7 +68,16 @@ const Navbar = ({ logedInUser }) => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">{logedInUser ? logedIn : gwest}</ul>
+        <ul className="navbar-nav">{isAuthenticated ? logedIn : gwest}</ul>
+        {isAuthenticated ? (
+          <button
+            style={styleLogout}
+            className="ml-auto"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        ) : null}
       </div>
     </nav>
   );
