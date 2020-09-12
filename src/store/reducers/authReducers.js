@@ -6,6 +6,7 @@ import {
   LOGOUT_SUCCESFUL,
   REGISTER_FAIL,
   LOGIN_FAIL,
+  CLOSE_ERROR_ALERT,
 } from "../actions/authActions";
 
 export default (state, action) => {
@@ -56,6 +57,12 @@ export default (state, action) => {
         ...state,
         isAuthenticated: false,
         registerFail: action.payload,
+      };
+    case CLOSE_ERROR_ALERT:
+      return {
+        ...state,
+        loginFail: null,
+        registerFail: null,
       };
 
     default:

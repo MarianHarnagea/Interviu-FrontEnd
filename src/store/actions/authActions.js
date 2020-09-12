@@ -7,6 +7,7 @@ export const LOGIN_SUCCESFUL = "LOGIN_SUCCESFUL";
 export const LOGOUT_SUCCESFUL = "LOGOUT_SUCCESFUL";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 export const LOGIN_FAIL = "LOGIN_FAIL";
+export const CLOSE_ERROR_ALERT = "CLOSE_ERROR_ALERT";
 
 export const loadUser = () => (dispatch) => {
   dispatch({
@@ -17,6 +18,12 @@ export const loadUser = () => (dispatch) => {
 export const ensureAuth = () => (dispatch) => {
   dispatch({
     type: ENSURE_AUTH,
+  });
+};
+
+export const closeErrorAlert = () => (dispatch) => {
+  dispatch({
+    type: CLOSE_ERROR_ALERT,
   });
 };
 
@@ -40,6 +47,9 @@ export const registerUser = (userValues) => (dispatch) => {
         type: REGISTER_FAIL,
         payload: err.response.data.fail,
       });
+      setTimeout(() => {
+        dispatch(closeErrorAlert());
+      }, 2000);
     });
 };
 
@@ -62,6 +72,9 @@ export const loginUser = (userValues) => (dispatch) => {
         type: LOGIN_FAIL,
         payload: err.response.data.error,
       });
+      setTimeout(() => {
+        dispatch(closeErrorAlert());
+      }, 2000);
     });
 };
 
